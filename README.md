@@ -1,4 +1,4 @@
-#MLflow REST API instance (with code)
+# MLflow REST API instance (with code)
 
 In this blog, we will introduce the code of the MLflow REST API and the use of some functions, including creating a new mlflow run, creating a new experiment, obtaining relevant experiment information from the experiment id/name, setting Tag/param/metric information, setting log batch information, and so on. For a detailed introduction to the MLflow REST API, see the blog [MLOps Ultimate Details: 7. MLflow REST API function introduction and application] (https://blog.csdn.net/zyctimes/article/details/123418774 ).
 
@@ -25,11 +25,11 @@ Table of contents
 -[3.9 Set log matric information] (#39-Set log-matric information)
 -[3.10 Set log batch information] (#310-set log-batch information)
 
-##1 Background introduction
+## 1 Background introduction
 
 Under normal circumstances, we can directly use the MLflow library to call the functional modules in it, but there are some cases where we don't want to use the MLflow library, or we don't use Python as the development language, then the MLflow REST API is also a good choice. The MLflow REST API allows you to create, list, get experiments and runs, and record parameters, metrics, and artifacts. The API is hosted under the `/api` route on the MLflow tracking server.
 
-##2 Code run
+## 2 Code run
 
 First download the code locally: 'git clone https://gitee.com/yichaoyyds/mlflow-ex-restapi-basic.git `.
 
@@ -71,9 +71,9 @@ Successfully logged parameter
 Successfully logged batch
 ```
 
-##3 Code interpretation
+## 3 Code interpretation
 
-###3.1 server connection
+### 3.1 server connection
 
 First of all, we need to start a server. Flask is used behind mlflow, so through the command "mlflow server", the system starts a local server, hostname=127.0.0.1, port=5000. These two are the default values. If you want more input, you can refer to：
 
@@ -93,7 +93,7 @@ requests. exceptions. ConnectionError: HTTPConnectionPool(host='127.0.0.1', port
 exceeded with url: /api/2.0/mlflow/experiments/get-by-name? experiment_name=test3 (Caused by NewConnectionError('<urllib3. connection. HttpConnection object at 0x000001E2AC630640>: Failed to establish a new connection: [WinError 10061] Unable to connect due to active rejection by the target computer. '))
 ```
 
-###3.2 Code logic
+### 3.2 Code logic
 
 The code we tested is stored in`example.py `In. Some related parameters are stored in`config.txt 'file：
 
