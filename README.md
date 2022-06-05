@@ -62,7 +62,7 @@ Successfully logged batch
 If it is not the first time it is run, the log in terminal is roughly as follows：
 
 ```bash
-experiment_info: {'experiment_id': '5', 'name': 'test2', 'artifact_location': '. /mlruns/5', 'lifecycle_stage': 'active'}
+experiment_info: {'experiment_id': '5', 'name': 'test2', 'artifact_location': './mlruns/5', 'lifecycle_stage': 'active'}
 experiment has already been created.
 Successfully create run with run id: a8bbe6717fbc473d8605eb6aae0afe1d
 Successfully logged parameter.
@@ -89,8 +89,8 @@ mlflow server \
 When our server is up and running, run it in another terminal`example.py `Is only valid, otherwise the following error will appear：
 
 ```terminal
-requests. exceptions. ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=5000): Max retries
-exceeded with url: /api/2.0/mlflow/experiments/get-by-name? experiment_name=test3 (Caused by NewConnectionError('<urllib3. connection. HttpConnection object at 0x000001E2AC630640>: Failed to establish a new connection: [WinError 10061] Unable to connect due to active rejection by the target computer. '))
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=5000): Max retries
+exceeded with url: /api/2.0/mlflow/experiments/get-by-name? experiment_name=test3 (Caused by NewConnectionError('<urllib3.connection. HttpConnection object at 0x000001E2AC630640>: Failed to establish a new connection: [WinError 10061] Unable to connect due to active rejection by the target computer. '))
 ```
 
 ### 3.2 Code logic
@@ -112,20 +112,22 @@ In the `__init__' function, we set the base url and check whether the current ex
 
 ```python
 def __init__(self, hostname="127.0.0.1", port=5000, experiment_name=None):
-self. base_url = "http://" + hostname + ":" + str(port) + "/api/2.0/mlflow"
-experiment_name = str(experiment_name)
-experiment_info = self. get_experiment_by_name(experiment_name)
-print("experiment_info: ",experiment_info)
-if experiment_info == None:
-print("Create new experiment. ")
-status_code = self. create_experiment(experiment_name = experiment_name)
-if status_code == 200: print("Successfully create new experiment. ")
-else: print("experiment creation failed: {}". format(status_code))
-else:
-print("experiment has already been created. ")
-self. experiment_id = experiment_info["experiment_id"]
-# Create a new run
-self. run_id = self. create_run()
+    self.base_url = "http://" + hostname + ":" + str(port) + "/api/2.0/mlflow"
+    experiment_name = str(experiment_name)
+    experiment_info = self.get_experiment_by_name(experiment_name)
+    print("experiment_info: ",experiment_info)
+    if experiment_info == None:
+        print("Create new experiment.")
+        status_code = self.create_experiment(experiment_name = experiment_name)
+    if status_code == 200: 
+        print("Successfully create new experiment.")
+    else: 
+        print("experiment creation failed: {}".format(status_code))
+    else:
+        print("experiment has already been created.")
+        self.experiment_id = experiment_info["experiment_id"]
+        # Create a new run
+        self.run_id = self.create_run()
 ```
 
 After instantiation, we will run all the mlflow rest api functions written before to see the effect：
@@ -134,23 +136,27 @@ After instantiation, we will run all the mlflow rest api functions written befor
 # Log Parameter
 #param = {"alpha": 0.1980}
 param = {"key": "alpha", "value": 0.1980}
-status_code = mlflow_rest. log_param(param)
-if status_code == 200: print("Successfully logged parameter. ")
-else: print("Logging parameter failed: {}". format(status_code))
+status_code = mlflow_rest.log_param(param)
+if status_code == 200: 
+    print("Successfully logged parameter.")
+else: 
+    print("Logging parameter failed: {}".format(status_code))
 
 # Set Tag
 tag = {"tag1": 1}
 #tag = {"key": "tag1", "value": 1}
-status_code = mlflow_rest. set_tag(tag)
-if status_code == 200: print("Successfully set tag. ")
-else: print("Logging parameter failed: {}". format(status_code))
+status_code = mlflow_rest.set_tag(tag)
+if status_code == 200: 
+    print("Successfully set tag.")
+else: 
+    print("Logging parameter failed: {}".format(status_code))
 
 # Log Metric
 metric = {"precision": 0.769}
 # metric = {"key": "precision", "value": "0.769"}
-status_code = mlflow_rest. log_metric(metric)
+status_code = mlflow_rest.log_metric(metric)
 if status_code == 200: print("Successfully logged parameter")
-else: print("Logging metric failed: {}". format(status_code))
+else: print("Logging metric failed: {}".format(status_code))
 
 # Log Batch
 metrics = {"mse": 2500.00, "rmse": 50.00}
@@ -158,9 +164,9 @@ params = {"learning_rate": 0.01, "n_estimators": 10}
 #metrics = [{"key": "mse", "value": "0.769"}, {"key": "callback", "value": "0.512"}]
 #params = [{"key": "learning_rate", "value": "0.018"}, {"key": "beta", "value": "0.98"}, {"key": "gamma", "value": "512"}]
 tags = []
-status_code = mlflow_rest. log_batch(metrics, params, tags)
+status_code = mlflow_rest.log_batch(metrics, params, tags)
 if status_code == 200:
 print("Successfully logged batch")
 else:
-print("Logging batch failed: {}". format(status_code))
+print("Logging batch failed: {}".format(status_code))
 ```
